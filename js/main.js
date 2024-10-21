@@ -3,11 +3,10 @@ const newTask = document.getElementById('new_task');
 const newTaskDescription = document.getElementById('task_description');
 const newTaskDeadline = document.getElementById('task_deadline');
 
-/*
 let show_task_name = document.getElementById('show_task_name');
 let show_task_description = document.getElementById('show_task_description');
 let show_task_deadline = document.getElementById('show_task_deadline');
-*/
+
 
 let request = window.indexedDB.open('MyTestDatabase1', 1);
 
@@ -17,19 +16,38 @@ request.onerror = (event) => {
 
 request.onsuccess = (event) => {
     console.log('Database opened successfully');
+    let db = event.target.result;
+    let transaction = db.transaction(['tasks'], 'readonly');
+    let store = transaction.objectStore('tasks');
+    let template = document.getElementById('task_template');
+
+    store.openCursor().onsuccess = (event) => {
+        let cursor = event.target.result;
+        if (cursor) {
+            let clone = template.content.cloneNode(true);
+            clone.querySelector('.task_name').textContent = cursor.value.task_name;
+            clone.querySelector('.task_description').textContent = cursor.value.task_description;
+            clone.querySelector('.task_deadline').textContent = cursor.value.task_deadline;
+            document.getElementById('task_list').appendChild(clone);
+            cursor.continue();
+        } else {
+            console.log(`Got all tasks`);
+        }
+    };
 }
 
 request.onupgradeneeded = (event) => {
-    const db = event.target.result;
+    let db = event.target.result;
     console.log('Database upgrade needed');
 
-    const store = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+    let store = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
 
     store.createIndex('task_name', 'task_name', { unique: false });
     store.createIndex('task_description', 'task_description', { unique: false });
     store.createIndex('task_deadline', 'task_deadline', { unique: false });
 
     console.log('Database setup complete');
+    db.close();
 }
 
 // click event
@@ -58,4 +76,7 @@ myButton.addEventListener('click', function() {
     }
 
     db.close();
+
+    // reload page
+    location.reload();
 });

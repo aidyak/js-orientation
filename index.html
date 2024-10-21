@@ -23,12 +23,16 @@
 
     <div class="tasks">
       <h2>Tasks</h2>
-      <ul>
-        <span>name: <label id="show_task_name"></label></span><br>
-        <span>description: <label id="show_task_description"></label></span><br>
-        <span>deadline: <label id="show_task_deadline"></label></span><br>
-      </ul>
+      <div id="task_list"></div>
     </div>
+
+    <template id="task_template">
+      <ul>
+        Name: <span class="task_name"></span><br>
+        Description: <span class="task_description"></span><br>
+        Deadline<span class="task_deadline"></span>
+      </ul>
+    </template>
 
     <script src="./js/main.js"></script>
   </body>
