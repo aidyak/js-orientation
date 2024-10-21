@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./styles/main.css">
+    <title>Simple Todo List</title>
+  </head>
+  <body>
+    <h1>Simple Todo List</h1>
+    <p>Welcome to Simple Todo List page.</p>
+    <p>This is an orientation for JS beginner.</p>
+    <h3>Add your task</h3>
+    <div class="todo_description">
+      <form action="">
+        <label for="task_name">name</label>
+        <input type="text" name="task_name" id="new_task"/>
+        <label for="task_description">description</label>
+        <input type="text" name="description" id="task_description" />
+        <label for="task_deadline">deadline</label>
+        <input type="date" name="deadline" id="task_deadline" />
+      </form>
+      <button id="add_button">Submit</button>
+    </div>
+
+    <div class="tasks">
+      <h2>Tasks</h2>
+      <ul>
+        <span>name: <label id="show_task_name"></label></span><br>
+        <span>description: <label id="show_task_description"></label></span><br>
+        <span>deadline: <label id="show_task_deadline"></label></span><br>
+      </ul>
+    </div>
+
+    <script src="./js/main.js"></script>
+  </body>
+</html>
