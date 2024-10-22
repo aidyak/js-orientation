@@ -80,3 +80,36 @@ myButton.addEventListener('click', function() {
     // reload page
     location.reload();
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+        if (event.target.id === 'search_button') {
+            let search_result = [];
+            let search_input = document.getElementById('search_input').value;
+            let db = request.result;
+            let transaction = db.transaction(['tasks'], 'readonly');
+            let store = transaction.objectStore('tasks');
+            let template = document.getElementById('task_template');
+            let task_list = document.getElementById('task_list');
+
+            store.openCursor().onsuccess = (event) => {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.task_name.includes(search_input)) {
+                        search_result.push(cursor.value);
+                    }
+                    cursor.continue();
+                } else {
+                    task_list.innerHTML = '';
+                    search_result.forEach((task) => {
+                        let clone = template.content.cloneNode(true);
+                        clone.querySelector('.task_name').textContent = task.task_name;
+                        clone.querySelector('.task_description').textContent = task.task_description;
+                        clone.querySelector('.task_deadline').textContent = task.task_deadline;
+                        document.getElementById('task_list').appendChild(clone);
+                    });
+                }
+            }
+        }
+    })
+})
